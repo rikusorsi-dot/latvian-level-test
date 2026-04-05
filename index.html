@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест уровня латышского языка</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #1a1a2e;
+  min-height: 100vh;
+  color: #e0e0e0;
+  padding: 20px;
+}
+.container {
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+}
+.card {
+  background: rgba(30,35,60,0.95);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 32px 28px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+h1 {
+  font-size: 1.6em;
+  text-align: center;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, #e94560, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.subtitle {
+  text-align: center;
+  color: #999;
+  font-size: 0.95em;
+  margin-bottom: 24px;
+}
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #e94560, #ff6b6b);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.level-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.level-A1 { background: #2d5a27; color: #7ddf64; }
+.level-A2 { background: #1a5276; color: #5dade2; }
+.level-B1 { background: #6c3483; color: #d2b4de; }
+.level-B2 { background: #7d6608; color: #f9e79f; }
+.level-C1 { background: #922b21; color: #f5b7b1; }
+
+.question-text {
+  font-size: 1.1em;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.reading-text {
+  background: rgba(255,255,255,0.05);
+  border-left: 3px solid #e94560;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95em;
+  line-height: 1.6;
+  color: #ccc;
+}
+.instruction {
+  font-size: 0.85em;
+  color: #888;
+  margin-bottom: 14px;
+  font-style: italic;
+}
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.option-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 14px 18px;
+  color: #e0e0e0;
+  font-size: 1em;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  line-height: 1.4;
+}
+.option-btn:hover {
+  background: rgba(233,69,96,0.15);
+  border-color: rgba(233,69,96,0.4);
+}
+.option-btn.selected {
+  background: rgba(233,69,96,0.2);
+  border-color: #e94560;
+  color: #fff;
+}
+.option-btn.correct {
+  background: rgba(45,90,39,0.4);
+  border-color: #7ddf64;
+  color: #7ddf64;
+}
+.option-btn.wrong {
+  background: rgba(146,43,33,0.4);
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+.option-btn:disabled { cursor: default; }
+
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: #e94560;
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  touch-action: manipulation;
+}
+.btn-primary:active { background: #c0392b; }
+.btn-primary:disabled { opacity: 0.4; cursor: default; }
+
+.result-level {
+  font-size: 3em;
+  text-align: center;
+  font-weight: 800;
+  margin: 16px 0 8px;
+}
+.result-desc {
+  text-align: center;
+  color: #bbb;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+.recommendation {
+  background: rgba(233,69,96,0.1);
+  border: 1px solid rgba(233,69,96,0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.recommendation h3 {
+  color: #ff6b6b;
+  margin-bottom: 8px;
+  font-size: 1.1em;
+}
+.recommendation p {
+  color: #ccc;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.recommendation a {
+  display: inline-block;
+  padding: 10px 24px;
+  background: linear-gradient(90deg, #e94560, #c0392b);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: transform 0.15s;
+}
+.recommendation a:hover { transform: scale(1.03); }
+
+.score-breakdown {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+.score-item {
+  text-align: center;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  min-width: 70px;
+}
+.score-item .level { font-weight: 700; font-size: 1.1em; color: #fff; }
+.score-item .score { font-size: 0.85em; color: #999; margin-top: 4px; }
+
+.hidden { display: none !important; }
+.counter {
+  text-align: center;
+  color: #666;
+  font-size: 0.85em;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 480px) {
+  .card { padding: 22px 18px; }
+  h1 { font-size: 1.3em; }
+  .option-btn { padding: 12px 14px; font-size: 0.95em; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- START SCREEN -->
+<div id="screen-start" class="card">
+  <h1>Тест уровня латышского языка</h1>
+  <p class="subtitle">Узнайте свой уровень за 5-10 минут</p>
+  <div style="color:#aaa; font-size:0.9em; line-height:1.6; margin-bottom:20px;">
+    <p style="margin-bottom:10px;">Тест содержит вопросы от A1 до C1. Вы начнёте с простых вопросов. Если отвечаете правильно — уровень повышается.</p>
+    <p>По результатам вы получите персональную рекомендацию, что делать дальше.</p>
+  </div>
+  <button class="btn-primary" onclick="startTest()">Начать тест</button>
+</div>
+
+<!-- QUESTION SCREEN -->
+<div id="screen-question" class="card hidden">
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  <div class="counter" id="counter"></div>
+  <div id="level-badge"></div>
+  <div id="reading-block" class="reading-text hidden"></div>
+  <div class="question-text" id="question-text"></div>
+  <div class="instruction" id="instruction"></div>
+  <div class="options" id="options"></div>
+  <button class="btn-primary hidden" id="btn-next" onclick="nextQuestion()">Далее</button>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="screen-result" class="card hidden"></div>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // ===== A1 (5 questions) =====
+  {
+    level: "A1",
+    reading: "Mani sauc Anna. Es dzīvoju Rīgā. Man ir 25 gadi. Mans draugs ir Jānis. Viņam ir 30 gadi. Jānis strādā birojā. Viņš arī dzīvo Rīgā, bet citā mājā. Mēs bieži ejam kopā uz kino.",
+    instruction: "Izlasiet tekstu un atbildiet! / Прочитайте текст и ответьте!",
+    question: "Kur dzīvo Anna?",
+    options: ["Viņa dzīvo Jelgavā.", "Viņa dzīvo Jūrmalā.", "Viņa dzīvo Rīgā."],
+    correct: 2
+  },
+  {
+    level: "A1",
+    reading: "Mani sauc Anna. Es dzīvoju Rīgā. Man ir 25 gadi. Mans draugs ir Jānis. Viņam ir 30 gadi. Jānis strādā birojā. Viņš arī dzīvo Rīgā, bet citā mājā. Mēs bieži ejam kopā uz kino.",
+    instruction: "Прочитайте текст и ответьте!",
+    question: "Cik gadu ir Jānim?",
+    options: ["25 gadi.", "30 gadi.", "35 gadi."],
+    correct: 1
+  },
+  {
+    level: "A1",
+    reading: "Mani sauc Anna. Es dzīvoju Rīgā. Man ir 25 gadi. Mans draugs ir Jānis. Viņam ir 30 gadi. Jānis strādā birojā. Viņš arī dzīvo Rīgā, bet citā mājā. Mēs bieži ejam kopā uz kino.",
+    instruction: "Прочитайте текст и ответьте!",
+    question: "Kur strādā Jānis?",
+    options: ["Veikalā.", "Birojā.", "Skolā."],
+    correct: 1
+  },
+  {
+    level: "A1",
+    instruction: "Выберите правильный вариант!",
+    question: "Ko Anna un Jānis dara bieži?",
+    options: ["Viņi iet uz kino.", "Viņi iet uz koncertiem.", "Viņi iet uz muzeju."],
+    correct: 0
+  },
+  {
+    level: "A1",
+    instruction: "Выберите правильный ответ!",
+    question: "\"Mans vārds ir...\" — kā to pateikt krieviski?",
+    options: ["Меня зовут...", "Я живу...", "Я работаю..."],
+    correct: 0
+  },
+
+  // ===== A2 (5 questions) =====
+  {
+    level: "A2",
+    instruction: "Прочитайте утверждение. Правда или нет?",
+    question: "Veikals strādā no pulksten 7.00 līdz 19.00. — Утверждение: veikals ir atvērts arī vakarā pulksten 20.00.",
+    options: ["Jā (Да)", "Nē (Нет)"],
+    correct: 1
+  },
+  {
+    level: "A2",
+    reading: "Santa dzīvo privātmājā. Viņai ir mazs, ruds kaķis. Santa brīvajā laikā sportoju un lasa grāmatas. Viņa strādā skolā.",
+    instruction: "Прочитайте текст и ответьте!",
+    question: "Kāds mājdzīvnieks ir Santai?",
+    options: ["Mazs, ruds kaķis.", "Liels, melns suns.", "Viņai nav mājdzīvnieku."],
+    correct: 0
+  },
+  {
+    level: "A2",
+    instruction: "Выберите правильный ответ!",
+    question: "Kur ir pasts?",
+    options: ["Pastā es pērku žurnālus.", "Tā ir maza, balta māja.", "Blakus autoostai."],
+    correct: 2
+  },
+  {
+    level: "A2",
+    reading: "Innas Lasmanes dzimtā pilsēta ir Varšava, bet tagad viņa ir rīdziniece. Inna kopā ar ģimeni Latvijā dzīvo jau četrus gadus. Inna strādā par medicīnas māsu veselības centrā „PLUSS". Viņas vīrs ir firmas „Liepa" grāmatvedis.",
+    instruction: "Прочитайте текст и ответьте!",
+    question: "Kāda ir Innas profesija?",
+    options: ["Grāmatvede.", "Medicīnas māsa.", "Skolotāja."],
+    correct: 1
+  },
+  {
+    level: "A2",
+    instruction: "Выберите правильный ответ!",
+    question: "Kas šodien būs brokastīs?",
+    options: ["Pankūkas ar biezpienu.", "Mēs ēdīsim ap pulksten deviņiem no rīta.", "Tās nebūs dārgas."],
+    correct: 0
+  },
+
+  // ===== B1 (5 questions) =====
+  {
+    level: "B1",
+    reading: "Gadatirgus „Prasmīgās rokas"\nKatru sestdienu no pulksten 6.30 līdz 15.00 mūsu meistaru dažādi izstrādājumi!\nŠajā sestdienā tirgū:\nSalmu figūriņas, koka rotaļlietas, māla trauki.\nMūsu tirdziņā strādās kafejnīca „Smalkmaizte", kurā būs ne tikai gardas smalkmaiztītes, bet arī dažādas kūkas.\nKafejnīca strādās visas dienas, izņemot pirmdienu.",
+    instruction: "Прочитайте и отметьте правильное утверждение!",
+    question: "Kurš apgalvojums ir pareizs?",
+    options: ["Gadatirgū var nopirkt dažādus koka traukus.", "Gadatirgū strādā arī kafejnīca.", "Kūkotava strādā tikai brīvdienās."],
+    correct: 1
+  },
+  {
+    level: "B1",
+    reading: "Frizētava-veikals aicina darbā pārdevēju.\nPrasības kandidātiem: pieredze līdzīgā amatā; teicama latviešu valodas prasme; teicamas komunikācijas prasmes.\nMēs piedāvājam: darbu pilsētas centrā; veselības apdrošināšanu pēc nostrādātajiem trim mēnešiem; profesionālo pilnveidi.",
+    instruction: "Прочитайте объявление и ответьте!",
+    question: "Kurš apgalvojums ir pareizs?",
+    options: ["Veikals meklē frizieri.", "Darbiniekam jāiesniedz dokumenti, sūtot tos uz e-pastu.", "Veikals meklē darbinieku ar pieredzi."],
+    correct: 2
+  },
+  {
+    level: "B1",
+    instruction: "Выберите правильную форму слова!",
+    question: "Mana māsa jau sen ______ dažādus augļus un dārzeņus.",
+    options: ["audzina", "pieaudzē", "audzē"],
+    correct: 2
+  },
+  {
+    level: "B1",
+    instruction: "Выберите правильный предлог!",
+    question: "Ekskursija būs ne tikai ______ dažādu ēdienu degustāciju, bet būs arī iespēja nopirkt produkciju.",
+    options: ["par", "ar", "pēc"],
+    correct: 1
+  },
+  {
+    level: "B1",
+    instruction: "Выберите правильную форму слова!",
+    question: "Māsa ______ neparastus kosmētiskos produktus.",
+    options: ["ražo", "ražojam", "ražoja"],
+    correct: 0
+  },
+
+  // ===== B2 (5 questions) =====
+  {
+    level: "B2",
+    instruction: "Выберите правильный предлог!",
+    question: "Vai tu vari pierakstīties ______ ārsta?",
+    options: ["par", "pie", "uz"],
+    correct: 1
+  },
+  {
+    level: "B2",
+    instruction: "Выберите правильную форму!",
+    question: "Pēc spēcīgā lietus ceļš kļuva ļoti ______.",
+    options: ["slidenāks", "slidos", "slidens"],
+    correct: 2
+  },
+  {
+    level: "B2",
+    instruction: "Выберите правильную форму!",
+    question: "Rīt mēs plānojam apmeklēt ______ muzeju.",
+    options: ["jauns", "jauno", "jauni"],
+    correct: 1
+  },
+  {
+    level: "B2",
+    instruction: "Выберите правильную форму!",
+    question: "Bērns palīdzēja mātei ______ mājas darbus.",
+    options: ["pabeigt", "pabeigta", "pabeigusi"],
+    correct: 0
+  },
+  {
+    level: "B2",
+    instruction: "Выберите правильную форму!",
+    question: "Viņi apmeklēja dažādas interesantas ______ sava ceļojuma laikā.",
+    options: ["vienas", "vietu", "vietas"],
+    correct: 2
+  },
+
+  // ===== C1 (5 questions) =====
+  {
+    level: "C1",
+    instruction: "Выберите наиболее точный вариант!",
+    question: "\"Pie pilnas bļodas draugu daudz\" — ko nozīmē šis sakāmvārds?",
+    options: [
+      "Kad cilvēkam klājas labi, viņam ir daudz draugu.",
+      "Draugi vienmēr palīdz grūtībās.",
+      "Kopīga ēšana stiprina draudzību."
+    ],
+    correct: 0
+  },
+  {
+    level: "C1",
+    instruction: "Выберите правильный вариант!",
+    question: "Skolotājs teica, ka mums ______ sagatavot mācību materiālus.",
+    options: ["nav", "var", "vajag"],
+    correct: 2
+  },
+  {
+    level: "C1",
+    reading: "Zaļā stunda ir pasākums, kas notiek tikai vienu reizi gadā. Pasākuma laikā tiek piedāvāts piedalīties dažādās aktivitātēs, piemēram, koku stādīšanā. Akcijas mērķis ir mudināt cilvēkus vairāk domāt par dabas aizsardzību.",
+    instruction: "Прочитайте текст и определите: правда или нет?",
+    question: "Zaļā stunda ir veltīta tikai atkritumu šķirošanai.",
+    options: ["Jā (Да)", "Nē (Нет)"],
+    correct: 1
+  },
+  {
+    level: "C1",
+    instruction: "Выберите правильную форму!",
+    question: "Viņa ______ savu domu tik pārliecinoši, ka neviens nevarēja iebilst.",
+    options: ["izteica", "izteikta", "izteiks"],
+    correct: 0
+  },
+  {
+    level: "C1",
+    instruction: "Выберите наиболее подходящий вариант!",
+    question: "Kuri faktori visvairāk ietekmē jauniešu profesijas izvēli?",
+    options: [
+      "Tikai vecāku viedoklis.",
+      "Intereses, darba tirgus situācija un izglītības iespējas.",
+      "Tikai alga un darba apstākļi."
+    ],
+    correct: 1
+  }
+];
+
+// State
+let currentQ = 0;
+let answers = [];
+let levelScores = { A1: {right:0, total:0}, A2: {right:0, total:0}, B1: {right:0, total:0}, B2: {right:0, total:0}, C1: {right:0, total:0} };
+let answered = false;
+
+function startTest() {
+  document.getElementById('screen-start').classList.add('hidden');
+  document.getElementById('screen-question').classList.remove('hidden');
+  currentQ = 0;
+  answers = [];
+  Object.keys(levelScores).forEach(k => { levelScores[k] = {right:0, total:0}; });
+  showQuestion();
+}
+
+function showQuestion() {
+  answered = false;
+  const q = QUESTIONS[currentQ];
+  const total = QUESTIONS.length;
+
+  document.getElementById('progress').style.width = ((currentQ / total) * 100) + '%';
+  document.getElementById('counter').textContent = `Вопрос ${currentQ + 1} из ${total}`;
+
+  const badge = document.getElementById('level-badge');
+  badge.innerHTML = `<span class="level-badge level-${q.level}">Уровень ${q.level}</span>`;
+
+  const readingBlock = document.getElementById('reading-block');
+  if (q.reading) {
+    readingBlock.textContent = q.reading;
+    readingBlock.classList.remove('hidden');
+  } else {
+    readingBlock.classList.add('hidden');
+  }
+
+  document.getElementById('question-text').textContent = q.question;
+  document.getElementById('instruction').textContent = q.instruction || '';
+
+  const optionsDiv = document.getElementById('options');
+  optionsDiv.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.onclick = () => selectOption(i);
+    optionsDiv.appendChild(btn);
+  });
+
+  document.getElementById('btn-next').classList.add('hidden');
+}
+
+function selectOption(idx) {
+  if (answered) return;
+  answered = true;
+
+  const q = QUESTIONS[currentQ];
+  const btns = document.querySelectorAll('.option-btn');
+
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correct) btn.classList.add('correct');
+    if (i === idx && idx !== q.correct) btn.classList.add('wrong');
+    if (i === idx) btn.classList.add('selected');
+  });
+
+  const isCorrect = idx === q.correct;
+  answers.push({ level: q.level, correct: isCorrect });
+  levelScores[q.level].total++;
+  if (isCorrect) levelScores[q.level].right++;
+
+  document.getElementById('btn-next').classList.remove('hidden');
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= QUESTIONS.length) {
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('screen-question').classList.add('hidden');
+  const resultDiv = document.getElementById('screen-result');
+  resultDiv.classList.remove('hidden');
+
+  // Calculate level
+  const levels = ['A1', 'A2', 'B1', 'B2', 'C1'];
+  let determinedLevel = 'A0';
+  for (const lvl of levels) {
+    const s = levelScores[lvl];
+    if (s.total > 0 && (s.right / s.total) >= 0.6) {
+      determinedLevel = lvl;
+    } else {
+      break;
+    }
+  }
+
+  // If got at least 60% on A1 but not A2, level is A1, etc.
+  // A0 means didn't pass A1
+
+  const totalCorrect = answers.filter(a => a.correct).length;
+  const totalQuestions = answers.length;
+  const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+
+  const levelDescriptions = {
+    'A0': 'Вы только начинаете знакомство с латышским языком. Не волнуйтесь — все когда-то начинали с нуля!',
+    'A1': 'Вы понимаете базовые фразы и простые тексты на латышском. Хорошее начало!',
+    'A2': 'Вы понимаете основные выражения и можете общаться в простых повседневных ситуациях.',
+    'B1': 'Вы уверенно понимаете тексты на знакомые темы и можете справиться с большинством ситуаций в Латвии.',
+    'B2': 'Вы хорошо понимаете сложные тексты и можете свободно общаться на разные темы.',
+    'C1': 'Отличный уровень! Вы понимаете сложные тексты, скрытые значения и свободно владеете языком.'
+  };
+
+  const recommendations = {
+    'A0': {
+      title: 'Тренажёр «Латышский с нуля»',
+      desc: 'Начните с базовых фраз и слов. Тренажёр в Telegram поможет освоить самые нужные выражения шаг за шагом.',
+      price: '5€',
+      link: 'https://t.me/latviski_s_nulya_bot'
+    },
+    'A1': {
+      title: 'Тренажёр «Латышский в Актив»',
+      desc: 'Закрепите базу и переведите знания в активное использование. Ежедневная практика по 10-15 минут.',
+      price: '5€',
+      link: 'https://t.me/lv_aktiv_trainer_bot'
+    },
+    'A2': {
+      title: 'Тренажёр для уровня A2+',
+      desc: 'Вы уже знаете основы — пора углублять знания. Этот тренажёр поможет перейти на следующий уровень.',
+      price: '5€',
+      link: 'https://t.me/kas_tu_esi_bot?start=lv'
+    },
+    'B1': {
+      title: 'Курс «Базовый Старт»',
+      desc: 'Систематизируйте знания и подготовьтесь к свободному общению. Полноценная программа с обратной связью.',
+      price: '50€',
+      link: 'https://payment.maksekeskus.ee/pay/1/link.html?shopId=e379cc70-0dbd-4526-a892-813f84abc51a&amount=50&paymentId=02'
+    },
+    'B2': {
+      title: 'Курс «Подготовка к экзаменам»',
+      desc: 'Подготовьтесь к сдаче экзамена на категорию. Углублённая грамматика, письмо и устная речь.',
+      price: '250€',
+      link: 'https://payment.maksekeskus.ee/pay/1/link.html?shopId=e379cc70-0dbd-4526-a892-813f84abc51a&amount=250&paymentId=123250'
+    },
+    'C1': {
+      title: 'Курс «Подготовка к экзаменам»',
+      desc: 'Ваш уровень высокий! Если хотите сдать экзамен на высшую категорию — этот курс для вас.',
+      price: '250€',
+      link: 'https://payment.maksekeskus.ee/pay/1/link.html?shopId=e379cc70-0dbd-4526-a892-813f84abc51a&amount=250&paymentId=123250'
+    }
+  };
+
+  const levelColors = {
+    'A0': '#95a5a6', 'A1': '#7ddf64', 'A2': '#5dade2',
+    'B1': '#d2b4de', 'B2': '#f9e79f', 'C1': '#f5b7b1'
+  };
+
+  const rec = recommendations[determinedLevel];
+
+  let breakdownHTML = '';
+  for (const lvl of levels) {
+    const s = levelScores[lvl];
+    if (s.total > 0) {
+      const pct = Math.round((s.right / s.total) * 100);
+      breakdownHTML += `<div class="score-item"><div class="level">${lvl}</div><div class="score">${s.right}/${s.total} (${pct}%)</div></div>`;
+    }
+  }
+
+  resultDiv.innerHTML = `
+    <h1>Результат теста</h1>
+    <div class="result-level" style="color:${levelColors[determinedLevel]}">${determinedLevel === 'A0' ? 'Начальный' : determinedLevel}</div>
+    <p class="result-desc">${levelDescriptions[determinedLevel]}</p>
+    <div style="text-align:center;color:#888;margin-bottom:4px;">Правильных ответов: ${totalCorrect} из ${totalQuestions} (${percentage}%)</div>
+    <div class="score-breakdown">${breakdownHTML}</div>
+    <div class="recommendation">
+      <h3>Рекомендуем: ${rec.title}</h3>
+      <p>${rec.desc}</p>
+      <a href="${rec.link}" target="_blank">Перейти — ${rec.price}</a>
+    </div>
+    <button class="btn-primary" onclick="restart()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);">Пройти тест заново</button>
+  `;
+}
+
+function restart() {
+  document.getElementById('screen-result').classList.add('hidden');
+  document.getElementById('screen-result').innerHTML = '';
+  document.getElementById('screen-start').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
