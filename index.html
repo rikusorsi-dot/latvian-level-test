@@ -233,7 +233,7 @@ h1 {
     <p style="margin-bottom:10px;">Тест содержит вопросы от A1 до C1. Вы начнёте с простых вопросов. Если отвечаете правильно — уровень повышается.</p>
     <p>По результатам вы получите персональную рекомендацию, что делать дальше.</p>
   </div>
-  <button class="btn-primary" onclick="startTest()">Начать тест</button>
+  <button class="btn-primary" id="btn-start">Начать тест</button>
 </div>
 
 <!-- QUESTION SCREEN -->
@@ -245,7 +245,7 @@ h1 {
   <div class="question-text" id="question-text"></div>
   <div class="instruction" id="instruction"></div>
   <div class="options" id="options"></div>
-  <button class="btn-primary hidden" id="btn-next" onclick="nextQuestion()">Далее</button>
+  <button class="btn-primary hidden" id="btn-next">Далее</button>
 </div>
 
 <!-- RESULT SCREEN -->
@@ -646,6 +646,12 @@ function restart() {
   document.getElementById('screen-result').innerHTML = '';
   document.getElementById('screen-start').classList.remove('hidden');
 }
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('btn-start').addEventListener('click', startTest);
+  document.getElementById('btn-next').addEventListener('click', nextQuestion);
+});
 </script>
 </body>
 </html>
